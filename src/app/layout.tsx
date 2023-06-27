@@ -1,3 +1,4 @@
+import { ClerkProvider, SignIn, SignedIn, SignedOut } from '@clerk/nextjs';
 import './globals.css';
 import { Inter } from 'next/font/google';
 
@@ -15,7 +16,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ClerkProvider>
+          <SignedOut>
+            <SignIn />
+          </SignedOut>
+          <SignedIn>
+            {children}
+          </SignedIn>
+        </ClerkProvider>
+      </body>
     </html>
   );
 }
