@@ -2,7 +2,7 @@
 
 import { generateResult, exchangeHashes } from './generate';
 import { useMutation } from '@tanstack/react-query';
-import { generateRandomPair, getRandomValue } from '@/hooks/shared/randomUtils';
+import { generateRandomPair, getRandomValue } from '@/shared/randomUtils';
 import { ShaTS } from 'sha256-ts';
 import _ from 'lodash';
 

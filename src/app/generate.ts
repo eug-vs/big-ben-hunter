@@ -1,5 +1,5 @@
 'use server';
-import { generateRandomPair, getRandomValue } from '@/hooks/shared/randomUtils';
+import { generateRandomPair, getRandomValue } from '@/shared/randomUtils';
 import { ShaTS } from 'sha256-ts';
 
 interface StoreItem {
