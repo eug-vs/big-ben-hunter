@@ -38,6 +38,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  recoverable-random:
+    specifier: ^1.0.3
+    version: 1.0.3
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
@@ -2206,6 +2209,10 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+    dev: false
+
+  /recoverable-random@1.0.3:
+    resolution: {integrity: sha512-Rxg5icl9nnhdUd4upeDqfnJ/kxdxFkpVeyGi3QqueQuQWZP+60NXb2e119lv0NJ3EtKOA89YUFih6ciG23+s4w==}
     dev: false
 
   /regenerator-runtime@0.13.11:
