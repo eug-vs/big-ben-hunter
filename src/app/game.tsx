@@ -4,6 +4,7 @@ import * as openpgp from 'openpgp';
 import NumberGenerator from 'recoverable-random';
 import { useEffect, useState } from 'react';
 import { generate } from './generate';
+import { getUnixTime } from 'date-fns';
 
 interface Props {
   armoredPublicKey: string;
@@ -48,7 +49,7 @@ export default function Game({ armoredPublicKey }: Props) {
 
   const handleClick = async () => {
     if (!key) throw new Error('Missing public key!');
-    const { signed, result } = await generate(Date.now());
+    const { signed, result } = await generate(getUnixTime(new Date()));
     console.log({ signed, result });
     await verifyResult(key, { signed, result });
   };
