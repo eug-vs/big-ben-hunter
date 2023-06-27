@@ -1,8 +1,7 @@
-import fs from 'fs';
 import Game from './game';
 
 export default async function Home() {
-  const armoredPublicKey = fs.readFileSync('public.key').toString()
+  const armoredPublicKey = atob(process.env.PUBLIC_KEY || '');
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

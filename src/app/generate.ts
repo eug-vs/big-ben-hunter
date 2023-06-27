@@ -1,11 +1,10 @@
 'use server';
-import fs from 'fs';
 import * as openpgp from 'openpgp';
 import NumberGenerator from 'recoverable-random';
 
 export async function generate(timestamp: number) {
   const privateKeyProtected = await openpgp.readPrivateKey({
-    armoredKey: fs.readFileSync('private.key').toString()
+    armoredKey: atob(process.env.PRIVATE_KEY || ''),
   });
 
   const privateKey = await openpgp.decryptKey({
