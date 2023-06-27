@@ -10,7 +10,7 @@ interface StoreItem {
 }
 
 // TODO: use redis or some other ephemeral storage for this shit
-const store: Record<string, StoreItem> = {};
+const store: Record<string, StoreItem | undefined> = {};
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function exchangeHashes(clientHash: string, guess: number) {
@@ -32,6 +32,9 @@ export async function generateResult(clientBinaryString: string, hash: string) {
   if (!storeItem) throw new Error('Item not found in store');
   const { binaryString, clientHash, guess } = storeItem;
 
+  // Remove storeItem after it's no longer needed
+  store[hash] = undefined;
+
   // Verify that client hash matches his number
   const expectedClientHash = ShaTS.sha256(clientBinaryString);
   if (expectedClientHash != clientHash)
@@ -40,6 +43,7 @@ export async function generateResult(clientBinaryString: string, hash: string) {
   const result = getRandomValue(clientBinaryString, binaryString);
   // TODO: process the result
   console.log({ result, guess });
+
 
   return { result, binaryString };
 }
