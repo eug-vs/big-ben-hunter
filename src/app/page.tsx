@@ -1,6 +1,6 @@
 import Game from './game';
 
-export default async function Home() {
+export default function Home() {
   const armoredPublicKey = atob(process.env.PUBLIC_KEY || '');
 
   return (
@@ -8,5 +8,5 @@ export default async function Home() {
       <h1 className="text-2xl">Big Ben Hunter</h1>
       <Game armoredPublicKey={armoredPublicKey} />
     </main>
-  )
+  );
 }

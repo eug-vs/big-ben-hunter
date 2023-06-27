@@ -15,7 +15,8 @@ export async function generate(timestamp: number) {
   const now = Date.now();
 
   if (timestamp > now) throw new Error('Timestamp can not be in the future');
-  if (now - timestamp > 1000) throw new Error('Timestamp can not be more than 1000ms away');
+  if (now - timestamp > 1000)
+    throw new Error('Timestamp can not be more than 1000ms away');
 
   const message = timestamp.toString();
 
@@ -24,7 +25,7 @@ export async function generate(timestamp: number) {
   const signed = await openpgp.sign({
     message: await openpgp.createCleartextMessage({ text: message }),
     signingKeys: privateKey,
-  })
+  });
 
   const generator = new NumberGenerator(signed);
   const result = generator.random(0, 4);
