@@ -12,10 +12,10 @@
     "@clerk/nextjs": "^4.21.10",
     "@tanstack/react-query": "^4.29.19",
     "next": "13.4.7",
-    "openpgp": "^5.9.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "recoverable-random": "^1.0.3"
+    "recoverable-random": "^1.0.3",
+    "sha256-ts": "^0.0.1"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.9",

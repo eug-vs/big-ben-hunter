@@ -26,6 +26,9 @@ dependencies:
   recoverable-random:
     specifier: ^1.0.3
     version: 1.0.3
+  sha256-ts:
+    specifier: ^0.0.1
+    version: 0.0.1
 
 devDependencies:
   '@tanstack/eslint-plugin-query':
@@ -2835,6 +2838,10 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /sha256-ts@0.0.1:
+    resolution: {integrity: sha512-YDHuk3XFXxhVxi/JIRrm/mWbK/p5nySa6ra2z4ciBjLxUGAWHw+elHGrRnrQ3fRYg2JxEwbQpqcR2qX1GL1m1w==}
+    dev: false
 
   /shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}

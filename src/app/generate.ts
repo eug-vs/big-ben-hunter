@@ -1,30 +1,48 @@
 'use server';
-import { auth } from '@clerk/nextjs';
-import * as openpgp from 'openpgp';
-import NumberGenerator from 'recoverable-random';
+import {
+  generateRandomPair,
+  getRandomValue,
+} from '@/hooks/shared/randomUtils';
+import { ShaTS } from 'sha256-ts';
 
-export async function generate(totalFlips: number) {
-  const { userId } = auth();
-  const privateKeyProtected = await openpgp.readPrivateKey({
-    armoredKey: atob(process.env.PRIVATE_KEY || ''),
-  });
+interface StoreItem {
+  hash: string;
+  clientHash: string;
+  binaryString: string;
+}
 
-  const privateKey = await openpgp.decryptKey({
-    privateKey: privateKeyProtected,
-    passphrase: 'Secret11#',
-  });
+// TODO: use redis or some other ephemeral storage for this shit
+const store: Record<string, StoreItem> = {};
 
-  const message = JSON.stringify({ userId, totalFlips });
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function exchangeHashes(clientHash: string) {
+  const { binaryString, hash } = generateRandomPair();
 
-  console.log({ privateKey, message });
+  store[hash] = {
+    hash,
+    binaryString,
+    clientHash,
+  };
 
-  const signed = await openpgp.sign({
-    message: await openpgp.createCleartextMessage({ text: message }),
-    signingKeys: privateKey,
-  });
+  return hash;
+}
 
-  const generator = new NumberGenerator(signed);
-  const result = generator.random(0, 4);
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function generateResult(
+  clientBinaryString: string,
+  hash: string
+) {
+  const storeItem = store[hash];
+  if (!storeItem) throw new Error('Item not found in store');
+  const { binaryString, clientHash } = storeItem;
 
-  return { signed, result };
+  // Verify that client hash matches his number
+  const expectedClientHash = ShaTS.sha256(clientBinaryString);
+  if (expectedClientHash != clientHash)
+    throw new Error('Client lied about hash');
+
+  const result = getRandomValue(clientBinaryString, binaryString);
+  // TODO: process the result
+
+  return { result, binaryString };
 }
