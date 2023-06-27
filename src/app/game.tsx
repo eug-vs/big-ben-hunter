@@ -33,9 +33,10 @@ async function verifyResult(
 
 export default function Game() {
   const [key, setKey] = useState<openpgp.Key>();
-  const armoredPublicKey = useMemo(() => btoa(process.env.NEXT_PUBLIC_PUBLIC_KEY || ''), []);
+  const armoredPublicKey = useMemo(() => atob(process.env.NEXT_PUBLIC_PUBLIC_KEY || ''), []);
 
   useEffect(() => {
+    console.log({ armoredPublicKey });
     openpgp
       .readKey({
         armoredKey: armoredPublicKey,
@@ -52,15 +53,13 @@ export default function Game() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       Game
       {key && (
         <button className="m-4 bg-red-500 p-2" onClick={handleClick}>
           Click me
         </button>
       )}
-      <h1>Here is your public key</h1>
-      <pre>{armoredPublicKey}</pre>
     </div>
   );
 }
