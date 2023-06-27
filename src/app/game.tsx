@@ -2,13 +2,9 @@
 
 import * as openpgp from 'openpgp';
 import NumberGenerator from 'recoverable-random';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { generate } from './generate';
 import { getUnixTime } from 'date-fns';
-
-interface Props {
-  armoredPublicKey: string;
-}
 
 async function verifyResult(
   key: openpgp.Key,
@@ -35,8 +31,9 @@ async function verifyResult(
     );
 }
 
-export default function Game({ armoredPublicKey }: Props) {
+export default function Game() {
   const [key, setKey] = useState<openpgp.Key>();
+  const armoredPublicKey = useMemo(() => btoa(process.env.NEXT_PUBLIC_PUBLIC_KEY || ''), []);
 
   useEffect(() => {
     openpgp
