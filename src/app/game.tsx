@@ -4,11 +4,12 @@ import { generateResult, exchangeHashes } from './generate';
 import { useMutation } from '@tanstack/react-query';
 import { generateRandomPair, getRandomValue } from '@/hooks/shared/randomUtils';
 import { ShaTS } from 'sha256-ts';
+import _ from 'lodash';
 
-async function agreeOnFairRandomNumber() {
+async function flip(guess: number) {
   const { hash, binaryString } = generateRandomPair();
 
-  const serverHash = await exchangeHashes(hash);
+  const serverHash = await exchangeHashes(hash, guess);
   const { result: serverResult, binaryString: serverBinaryString } =
     await generateResult(binaryString, serverHash);
 
@@ -20,7 +21,7 @@ async function agreeOnFairRandomNumber() {
   const result = getRandomValue(binaryString, serverBinaryString);
   if (result != serverResult) throw new Error('Result does not match');
 
-  return result;
+  return { guess, result };
 }
 
 export default function Game() {
@@ -29,19 +30,34 @@ export default function Game() {
     data,
     isLoading: isFlipping,
   } = useMutation({
-    mutationFn: agreeOnFairRandomNumber,
+    mutationFn: flip,
   });
 
   return (
     <div className="flex flex-col items-center">
-      <button
-        className="m-4 bg-red-500 p-2 px-4"
-        onClick={() => handleFlip()}
-        disabled={isFlipping}
-      >
-        {isFlipping ? 'Flipping...' : 'Flip'}
-      </button>
-      {data !== undefined && <h1>Result: {data}</h1>}
+      <section className="flex gap-4">
+        {_.times(4).map((id) => (
+          <button
+            key={id}
+            className="m-4 bg-red-500 p-6 rounded-full aspect-square whitespace-nowrap"
+            onClick={() => handleFlip(id)}
+            disabled={isFlipping}
+          >
+            Flip {id}
+          </button>
+        ))}
+      </section>
+      {isFlipping && (
+        <h1>
+          Flipping...
+        </h1>
+      )}
+      {data !== undefined && (
+        <h1 className={`${data.result !== data.guess ? 'text-green-500' : 'text-red-500'}`}>
+          Result: {data.result}
+          <br /> Guess: {data.guess}
+        </h1>
+      )}
     </div>
   );
 }

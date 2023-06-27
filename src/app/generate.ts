@@ -9,19 +9,21 @@ interface StoreItem {
   hash: string;
   clientHash: string;
   binaryString: string;
+  guess: number;
 }
 
 // TODO: use redis or some other ephemeral storage for this shit
 const store: Record<string, StoreItem> = {};
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function exchangeHashes(clientHash: string) {
+export async function exchangeHashes(clientHash: string, guess: number) {
   const { binaryString, hash } = generateRandomPair();
 
   store[hash] = {
     hash,
     binaryString,
     clientHash,
+    guess,
   };
 
   return hash;
@@ -34,7 +36,7 @@ export async function generateResult(
 ) {
   const storeItem = store[hash];
   if (!storeItem) throw new Error('Item not found in store');
-  const { binaryString, clientHash } = storeItem;
+  const { binaryString, clientHash, guess } = storeItem;
 
   // Verify that client hash matches his number
   const expectedClientHash = ShaTS.sha256(clientBinaryString);
@@ -43,6 +45,7 @@ export async function generateResult(
 
   const result = getRandomValue(clientBinaryString, binaryString);
   // TODO: process the result
+  console.log({ result, guess });
 
   return { result, binaryString };
 }
