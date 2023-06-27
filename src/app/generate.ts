@@ -1,8 +1,5 @@
 'use server';
-import {
-  generateRandomPair,
-  getRandomValue,
-} from '@/hooks/shared/randomUtils';
+import { generateRandomPair, getRandomValue } from '@/hooks/shared/randomUtils';
 import { ShaTS } from 'sha256-ts';
 
 interface StoreItem {
@@ -30,10 +27,7 @@ export async function exchangeHashes(clientHash: string, guess: number) {
 }
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function generateResult(
-  clientBinaryString: string,
-  hash: string
-) {
+export async function generateResult(clientBinaryString: string, hash: string) {
   const storeItem = store[hash];
   if (!storeItem) throw new Error('Item not found in store');
   const { binaryString, clientHash, guess } = storeItem;

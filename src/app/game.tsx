@@ -39,7 +39,7 @@ export default function Game() {
         {_.times(4).map((id) => (
           <button
             key={id}
-            className="m-4 bg-red-500 p-6 rounded-full aspect-square whitespace-nowrap"
+            className="m-4 aspect-square whitespace-nowrap rounded-full bg-red-500 p-6"
             onClick={() => handleFlip(id)}
             disabled={isFlipping}
           >
@@ -47,13 +47,13 @@ export default function Game() {
           </button>
         ))}
       </section>
-      {isFlipping && (
-        <h1>
-          Flipping...
-        </h1>
-      )}
+      {isFlipping && <h1>Flipping...</h1>}
       {data !== undefined && (
-        <h1 className={`${data.result !== data.guess ? 'text-green-500' : 'text-red-500'}`}>
+        <h1
+          className={`${
+            data.result !== data.guess ? 'text-green-500' : 'text-red-500'
+          }`}
+        >
           Result: {data.result}
           <br /> Guess: {data.guess}
         </h1>

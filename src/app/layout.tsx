@@ -22,9 +22,7 @@ export default function RootLayout({
             <SignIn />
           </SignedOut>
           <SignedIn>
-            <ReactQueryProvider>
-              {children}
-            </ReactQueryProvider>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
           </SignedIn>
         </ClerkProvider>
       </body>

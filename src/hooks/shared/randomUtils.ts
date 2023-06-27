@@ -1,5 +1,5 @@
-import NumberGenerator from "recoverable-random";
-import { ShaTS } from "sha256-ts";
+import NumberGenerator from 'recoverable-random';
+import { ShaTS } from 'sha256-ts';
 
 // Generates a random 256-bit number and it's hash
 export function generateRandomPair() {
@@ -14,7 +14,10 @@ export function generateRandomPair() {
 }
 
 // Use XOR of two large numbers as a seed for RNG
-export function getRandomValue(clientBinaryString: string, serverBinaryString: string) {
+export function getRandomValue(
+  clientBinaryString: string,
+  serverBinaryString: string
+) {
   const serverBinary = BigInt(`0b${serverBinaryString}`);
   const clientBinary = BigInt(`0b${clientBinaryString}`);
 
