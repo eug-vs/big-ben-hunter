@@ -7,6 +7,7 @@ import { ShaTS } from 'sha256-ts';
 import _ from 'lodash';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import Bitcoin from './bitcoin';
 
 async function flip(guess: number) {
   const { hash, binaryString } = generateRandomPair();
@@ -39,35 +40,37 @@ export default function Game() {
     onSuccess() {
       startTransition(() => {
         router.refresh();
-      })
-    }
+      });
+    },
   });
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1">
-      <section className="flex gap-4">
+    <div className="flex flex-1 flex-col items-center justify-center">
+      <section className="flex w-8/12 justify-between">
         {_.times(4).map((id) => (
           <button
             key={id}
-            className="m-4 aspect-square whitespace-nowrap rounded-full bg-red-500 p-6"
+            className="w-28 transition hover:scale-110"
             onClick={() => handleFlip(id)}
             disabled={isFlipping}
           >
-            Flip {id}
+            <Bitcoin />
           </button>
         ))}
       </section>
-      {isFlipping && <h1>Flipping...</h1>}
-      {data !== undefined && (
-        <h1
-          className={`${
-            data.result !== data.guess ? 'text-green-500' : 'text-red-500'
-          }`}
-        >
-          Result: {data.result}
-          <br /> Guess: {data.guess}
-        </h1>
-      )}
+      <section>
+        {isFlipping && <h1>Flipping...</h1>}
+        {data !== undefined && (
+          <h1
+            className={`${
+              data.result !== data.guess ? 'text-green-500' : 'text-red-500'
+            }`}
+          >
+            Result: {data.result}
+            <br /> Guess: {data.guess}
+          </h1>
+        )}
+      </section>
     </div>
   );
 }

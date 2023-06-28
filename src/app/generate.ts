@@ -58,11 +58,11 @@ export async function generateResult(clientBinaryString: string, hash: string) {
           divide: 2,
         },
         streak: 0,
-      }
-    })
+      },
+    });
   } else {
     const { streak } = await prisma.playerAccount.findFirstOrThrow({
-      where: { userId }
+      where: { userId },
     });
     await prisma.playerAccount.update({
       where: { userId },
@@ -72,9 +72,9 @@ export async function generateResult(clientBinaryString: string, hash: string) {
         },
         streak: {
           increment: 1,
-        }
-      }
-    })
+        },
+      },
+    });
   }
 
   return { result, binaryString };

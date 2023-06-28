@@ -11,6 +11,13 @@ module.exports = {
       colors: {
         primary: colors.amber[300],
       },
+      keyframes: {
+        bounce: {
+          '0%, 100%': {
+            transform: 'translateY(-3%)',
+          }
+        }
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

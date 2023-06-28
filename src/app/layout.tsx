@@ -17,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-pattern min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.className} flex min-h-screen flex-col bg-pattern`}
+      >
         <ClerkProvider>
           <Header />
-          <main className="flex-1 flex flex-col p-4">
+          <main className="flex flex-1 flex-col p-4">
             <SignedOut>
               <SignIn />
             </SignedOut>
