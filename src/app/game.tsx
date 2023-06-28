@@ -44,7 +44,7 @@ export default function Game() {
   });
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex flex-col items-center justify-center flex-1">
       <section className="flex gap-4">
         {_.times(4).map((id) => (
           <button
