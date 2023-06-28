@@ -68,6 +68,7 @@ export default function Game({ streak }: Props) {
                     ? 'flipped scale-110 duration-500'
                     : 'hover:rotate-[-25deg] hover:scale-110'
                 }
+                ${isFlipping && flippedId !== id ? 'grayscale duration-700' : ''}
               `}
               onClick={() => handleFlip(id)}
               disabled={isFlipping}
