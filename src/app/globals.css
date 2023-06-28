@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .flipped {
+    transform: rotateY(180deg) rotate(-25deg);
+  }
+}

@@ -6,8 +6,12 @@ import { generateRandomPair, getRandomValue } from '@/shared/randomUtils';
 import { ShaTS } from 'sha256-ts';
 import _ from 'lodash';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import Bitcoin from './bitcoin';
+
+interface Props {
+  streak: number;
+}
 
 async function flip(guess: number) {
   const { hash, binaryString } = generateRandomPair();
@@ -27,8 +31,9 @@ async function flip(guess: number) {
   return { guess, result };
 }
 
-export default function Game() {
+export default function Game({ streak }: Props) {
   const router = useRouter();
+  const [flippedId, setFlippedId] = useState<number>();
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -37,6 +42,12 @@ export default function Game() {
     isLoading: isFlipping,
   } = useMutation({
     mutationFn: flip,
+    onMutate(id) {
+      setFlippedId(id);
+    },
+    onSettled() {
+      setFlippedId(undefined);
+    },
     onSuccess() {
       startTransition(() => {
         router.refresh();
@@ -48,28 +59,34 @@ export default function Game() {
     <div className="flex flex-1 flex-col items-center justify-center">
       <section className="flex w-8/12 justify-between">
         {_.times(4).map((id) => (
-          <button
-            key={id}
-            className="w-28 transition hover:scale-110"
-            onClick={() => handleFlip(id)}
-            disabled={isFlipping}
-          >
-            <Bitcoin />
-          </button>
+          <div className="relative" key={id}>
+            <button
+              className={`
+                relative w-28 transform-gpu transition
+                ${
+                  flippedId === id
+                    ? 'flipped scale-110 duration-500'
+                    : 'hover:rotate-[-25deg] hover:scale-110'
+                }
+              `}
+              onClick={() => handleFlip(id)}
+              disabled={isFlipping}
+            >
+              <Bitcoin />
+            </button>
+            {data?.guess === id && (
+              <span
+                className={`absolute right-4 mx-auto animate-fly-away text-2xl font-bold ${
+                  data.result === id ? 'text-red-500' : ''
+                }`}
+              >
+                {data.result === id
+                  ? '-50%'
+                  : `+${isPending ? streak + 1 : streak}`}
+              </span>
+            )}
+          </div>
         ))}
-      </section>
-      <section>
-        {isFlipping && <h1>Flipping...</h1>}
-        {data !== undefined && (
-          <h1
-            className={`${
-              data.result !== data.guess ? 'text-green-500' : 'text-red-500'
-            }`}
-          >
-            Result: {data.result}
-            <br /> Guess: {data.guess}
-          </h1>
-        )}
       </section>
     </div>
   );

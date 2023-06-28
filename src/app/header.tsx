@@ -1,8 +1,12 @@
 import { prisma } from '@/server/db';
 import { UserButton, auth } from '@clerk/nextjs';
 import Link from 'next/link';
+import { cache } from 'react';
 
-async function getOrCreatePlayerAccount(userId: string) {
+export const getOrCreatePlayerAccount = cache(async () => {
+  const { userId } = auth();
+  if (!userId) throw new Error('Unauthorized');
+
   try {
     return await prisma.playerAccount.findFirstOrThrow({
       where: { userId },
@@ -12,13 +16,10 @@ async function getOrCreatePlayerAccount(userId: string) {
       data: { userId },
     });
   }
-}
+});
 
 export default async function Header() {
-  const { userId } = auth();
-  if (!userId) throw new Error('Unauthorized');
-
-  const playerAccount = await getOrCreatePlayerAccount(userId);
+  const playerAccount = await getOrCreatePlayerAccount();
 
   return (
     <header className="flex w-full items-center justify-between border-b-2 border-black bg-primary p-4 font-semibold uppercase shadow-xl">

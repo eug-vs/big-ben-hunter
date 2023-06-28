@@ -15,8 +15,17 @@ module.exports = {
         bounce: {
           '0%, 100%': {
             transform: 'translateY(-3%)',
-          }
-        }
+          },
+        },
+        'fly-away': {
+          '100%': {
+            transform: 'translateY(-300px)',
+            opacity: 0,
+          },
+        },
+      },
+      animation: {
+        'fly-away': 'fly-away 2s forwards',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -27,4 +36,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};
