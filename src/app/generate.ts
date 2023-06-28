@@ -1,5 +1,7 @@
 'use server';
+import { prisma } from '@/server/db';
 import { generateRandomPair, getRandomValue } from '@/shared/randomUtils';
+import { auth } from '@clerk/nextjs';
 import { ShaTS } from 'sha256-ts';
 
 interface StoreItem {
@@ -28,6 +30,10 @@ export async function exchangeHashes(clientHash: string, guess: number) {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function generateResult(clientBinaryString: string, hash: string) {
+  'use server';
+  const { userId } = auth();
+  if (!userId) throw new Error('Unauthorized');
+
   const storeItem = store[hash];
   if (!storeItem) throw new Error('Item not found in store');
   const { binaryString, clientHash, guess } = storeItem;
@@ -41,9 +47,35 @@ export async function generateResult(clientBinaryString: string, hash: string) {
     throw new Error('Client lied about hash');
 
   const result = getRandomValue(clientBinaryString, binaryString);
-  // TODO: process the result
-  console.log({ result, guess });
 
+  // Process the result
+  console.log({ result, guess });
+  if (guess === result) {
+    await prisma.playerAccount.update({
+      where: { userId },
+      data: {
+        balance: {
+          divide: 2,
+        },
+        streak: 0,
+      }
+    })
+  } else {
+    const { streak } = await prisma.playerAccount.findFirstOrThrow({
+      where: { userId }
+    });
+    await prisma.playerAccount.update({
+      where: { userId },
+      data: {
+        balance: {
+          increment: streak + 1,
+        },
+        streak: {
+          increment: 1,
+        }
+      }
+    })
+  }
 
   return { result, binaryString };
 }

@@ -5,7 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import { generateRandomPair, getRandomValue } from '@/shared/randomUtils';
 import { ShaTS } from 'sha256-ts';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 
 async function flip(guess: number) {
   const { hash, binaryString } = generateRandomPair();
@@ -26,8 +27,8 @@ async function flip(guess: number) {
 }
 
 export default function Game() {
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const {
     mutateAsync: handleFlip,
@@ -35,23 +36,15 @@ export default function Game() {
     isLoading: isFlipping,
   } = useMutation({
     mutationFn: flip,
-    onSuccess({ guess, result }) {
-      if (guess === result) {
-        setScore(Math.round(score / 2));
-        setStreak(0);
-      } else {
-        setScore(score + streak);
-        setStreak(streak + 1);
-      }
+    onSuccess() {
+      startTransition(() => {
+        router.refresh();
+      })
     }
   });
 
   return (
     <div className="flex flex-col items-center gap-8">
-      <section>
-        <h1>Score: {score}</h1>
-        <h1>Streak: {streak}</h1>
-      </section>
       <section className="flex gap-4">
         {_.times(4).map((id) => (
           <button
