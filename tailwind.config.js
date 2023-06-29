@@ -14,7 +14,7 @@ module.exports = {
       keyframes: {
         bounce: {
           '0%, 100%': {
-            transform: 'translateY(-3%)',
+            transform: 'translateY(-5%)',
           },
         },
         'fly-away': {

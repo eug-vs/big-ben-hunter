@@ -68,12 +68,22 @@ export default function Game({ streak }: Props) {
                     ? 'flipped scale-110 duration-500'
                     : 'hover:rotate-[-25deg] hover:scale-110'
                 }
-                ${isFlipping && flippedId !== id ? 'grayscale duration-700' : ''}
+                ${
+                  isFlipping && flippedId !== id ? 'grayscale duration-700' : ''
+                }
               `}
               onClick={() => handleFlip(id)}
               disabled={isFlipping}
             >
-              <Bitcoin />
+              <Bitcoin
+                className={
+                  {
+                    1: 'animation-delay-250',
+                    2: 'animation-delay-500',
+                    3: 'animation-delay-750',
+                  }[id]
+                }
+              />
             </button>
             {data?.guess === id && (
               <span

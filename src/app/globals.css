@@ -6,4 +6,14 @@
   .flipped {
     transform: rotateY(180deg) rotate(-25deg);
   }
+
+  .animation-delay-250 {
+    animation-delay: 250ms;
+  }
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  .animation-delay-750 {
+    animation-delay: 750ms;
+  }
 }

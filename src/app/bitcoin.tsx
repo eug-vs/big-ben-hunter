@@ -1,7 +1,7 @@
-export default function Bitcoin() {
+export default function Bitcoin({ className }: { className?: string }) {
   return (
     <svg
-      className="animate-bounce rounded-full bg-primary shadow-xl ring-2 ring-black"
+      className={`animate-bounce rounded-full bg-primary shadow-xl ring-2 ring-black ${className || ''}`}
       width="100%"
       height="100%"
       version="1.1"
