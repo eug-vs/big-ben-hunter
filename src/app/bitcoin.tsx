@@ -5,11 +5,11 @@ export default function Bitcoin({ className }: { className?: string }) {
       width="100%"
       height="100%"
       version="1.1"
-      shape-rendering="geometricPrecision"
-      text-rendering="geometricPrecision"
-      image-rendering="optimizeQuality"
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      shapeRendering="geometricPrecision"
+      textRendering="geometricPrecision"
+      imageRendering="optimizeQuality"
+      fillRule="evenodd"
+      clipRule="evenodd"
       viewBox="0 0 4091.27 4091.73"
     >
       <g id="Layer_x0020_1">
