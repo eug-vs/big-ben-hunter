@@ -9,6 +9,8 @@ import {
   GlyphSeries,
   LineSeries,
   XYChart,
+  buildChartTheme,
+  defaultColors,
 } from '@visx/xychart';
 
 import { type FlipState, type PlayerAccount } from '@prisma/client';
@@ -51,6 +53,14 @@ export default function Map({ data, height = 700 }: Props) {
       height={height}
       xScale={{ type: 'linear' }}
       yScale={{ type: 'linear' }}
+      theme={buildChartTheme({
+        backgroundColor: '#f09ae9',
+        colors: _.shuffle(defaultColors),
+        gridColor: '#336d88',
+        gridColorDark: '#1d1b38',
+        svgLabelBig: { fill: '#1d1b38' },
+        tickLength: 8,
+      })}
     >
       <AnimatedGrid />
       <AnimatedAxis orientation="bottom" label="Balance" />
@@ -58,7 +68,7 @@ export default function Map({ data, height = 700 }: Props) {
       <AreaSeries
         fill="url('#gradient')"
         dataKey="Best path"
-        fillOpacity={0.3}
+        fillOpacity={0.1}
         data={bestPath}
         renderLine={false}
         xAccessor={(state) => state.balance}
