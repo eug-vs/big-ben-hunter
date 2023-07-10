@@ -55,8 +55,8 @@ export default function Map({ data, height = 700 }: Props) {
         yScale={{ type: 'linear' }}
       >
         <AnimatedGrid />
-        <AnimatedAxis orientation="bottom" />
-        <AnimatedAxis orientation="left" />
+        <AnimatedAxis orientation="bottom" label="Balance" />
+        <AnimatedAxis orientation="left" label="Streak" />
         <AreaSeries
           dataKey="Best path"
           fillOpacity={0.07}
