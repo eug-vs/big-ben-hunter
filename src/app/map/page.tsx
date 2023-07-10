@@ -1,7 +1,7 @@
-import Map from "./map";
+import Map from './map';
 import { prisma } from '@/server/db';
-import { clerkClient } from "@clerk/nextjs";
-import _ from "lodash";
+import { clerkClient } from '@clerk/nextjs';
+import _ from 'lodash';
 
 export default async function MapPage() {
   const data = await prisma.playerAccount.findMany({
@@ -14,20 +14,22 @@ export default async function MapPage() {
           number: true,
           balance: true,
           streak: true,
-        }
+        },
       },
-    }
+    },
   });
   const users = await clerkClient.users.getUserList({
-    userId: data.map(acc => acc.userId),
+    userId: data.map((acc) => acc.userId),
   });
 
-  const dataWithNames = _.map(data, (account, index) => ({
-    ...account,
-    username: users[index].username || `${users[index].firstName || ''} ${users[index].lastName || ''}`
-  }))
+  const dataWithNames = _.map(data, (account) => {
+    const user = _.find(users, { id: account.userId });
+    return {
+      ...account,
+      username:
+        user?.username || `${user?.firstName || ''} ${user?.lastName || ''}`,
+    };
+  });
 
-  return (
-    <Map data={dataWithNames} />
-  )
+  return <Map data={dataWithNames} />;
 }

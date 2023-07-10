@@ -90,7 +90,6 @@ export default function Map({ data, height = 700 }: Props) {
           >
             <AnnotationLabel title={account.username} />
             <AnnotationCircleSubject />
-            <AnnotationConnector />
           </Annotation>
         ))}
       </XYChart>
