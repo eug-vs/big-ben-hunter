@@ -20,9 +20,6 @@ export default async function MapPage() {
   });
 
   return (
-    <div>
-      <h1>Map 8========D</h1>
-      <Map data={flipStates} />
-    </div>
+    <Map data={flipStates} />
   )
 }
