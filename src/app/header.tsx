@@ -62,6 +62,7 @@ export default async function Header() {
       <nav className="flex gap-4 text-lg">
         <Link href="/">Play</Link>
         <Link href="/shop">Shop :DDD</Link>
+        <Link href="/map">Map :D</Link>
       </nav>
     </header>
   );
