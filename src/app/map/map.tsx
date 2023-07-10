@@ -2,17 +2,17 @@
 import {
   AnimatedAxis,
   AnimatedGrid,
-  XYChart,
+  Annotation,
+  AnnotationCircleSubject,
+  AnnotationLabel,
+  AreaSeries,
   GlyphSeries,
   LineSeries,
-  AreaSeries,
-  Annotation,
-  AnnotationLabel,
-  AnnotationCircleSubject,
-  AnnotationConnector,
+  XYChart,
 } from '@visx/xychart';
 
-import { type PlayerAccount, type FlipState } from '@prisma/client';
+import { type FlipState, type PlayerAccount } from '@prisma/client';
+import { GradientPurpleOrange } from '@visx/gradient';
 import _ from 'lodash';
 
 interface Props {
@@ -47,52 +47,50 @@ export default function Map({ data, height = 700 }: Props) {
   );
 
   return (
-    <section className="bg-white">
-      <h1 className="p-4 text-xl font-bold">Map 8====D</h1>
-      <XYChart
-        height={height}
-        xScale={{ type: 'linear' }}
-        yScale={{ type: 'linear' }}
-      >
-        <AnimatedGrid />
-        <AnimatedAxis orientation="bottom" label="Balance" />
-        <AnimatedAxis orientation="left" label="Streak" />
-        <AreaSeries
-          dataKey="Best path"
-          fillOpacity={0.07}
-          data={bestPath}
-          xAccessor={(state) => state.balance}
-          yAccessor={(state) => state.streak}
-        />
-        {data.map((account) => (
-          <>
-            <LineSeries
-              dataKey={`Path: ${account.id}`}
-              data={account.flipStates}
-              xAccessor={(state) => state.balance}
-              yAccessor={(state) => state.streak}
-            />
-            <GlyphSeries
-              dataKey={`Glyphs: ${account.id} `}
-              data={account.flipStates}
-              xAccessor={(state) => state.balance}
-              yAccessor={(state) => state.streak}
-            />
-          </>
-        ))}
-        {data.map((account) => (
-          <Annotation
-            key={account.id}
+    <XYChart
+      height={height}
+      xScale={{ type: 'linear' }}
+      yScale={{ type: 'linear' }}
+    >
+      <AnimatedGrid />
+      <AnimatedAxis orientation="bottom" label="Balance" />
+      <AnimatedAxis orientation="left" label="Streak" />
+      <AreaSeries
+        fill="url('#gradient')"
+        dataKey="Best path"
+        fillOpacity={0.3}
+        data={bestPath}
+        renderLine={false}
+        xAccessor={(state) => state.balance}
+        yAccessor={(state) => state.streak}
+      />
+      <GradientPurpleOrange id="gradient" />
+      {data.map((account) => (
+        <>
+          <LineSeries
             dataKey={`Path: ${account.id}`}
-            datum={
-              _.maxBy(account.flipStates, 'number') || account.flipStates[0]
-            }
-          >
-            <AnnotationLabel title={account.username} />
-            <AnnotationCircleSubject />
-          </Annotation>
-        ))}
-      </XYChart>
-    </section>
+            data={account.flipStates}
+            xAccessor={(state) => state.balance}
+            yAccessor={(state) => state.streak}
+          />
+          <GlyphSeries
+            dataKey={`Glyphs: ${account.id} `}
+            data={account.flipStates}
+            xAccessor={(state) => state.balance}
+            yAccessor={(state) => state.streak}
+          />
+        </>
+      ))}
+      {data.map((account) => (
+        <Annotation
+          key={account.id}
+          dataKey={`Path: ${account.id}`}
+          datum={_.maxBy(account.flipStates, 'number') || account.flipStates[0]}
+        >
+          <AnnotationLabel title={account.username} />
+          <AnnotationCircleSubject />
+        </Annotation>
+      ))}
+    </XYChart>
   );
 }

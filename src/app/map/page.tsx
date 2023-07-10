@@ -10,6 +10,7 @@ export default async function MapPage() {
         orderBy: {
           number: 'desc',
         },
+        take: 30,
         select: {
           number: true,
           balance: true,
@@ -31,5 +32,10 @@ export default async function MapPage() {
     };
   });
 
-  return <Map data={dataWithNames} />;
+  return (
+    <section className="bg-amber-100">
+      <h1 className="p-4 text-xl font-bold">Map 8====D</h1>
+      <Map data={dataWithNames} />;
+    </section>
+  )
 }

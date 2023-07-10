@@ -14,6 +14,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^4.29.19
     version: 4.29.19(react-dom@18.2.0)(react@18.2.0)
+  '@visx/gradient':
+    specifier: ^3.0.0
+    version: 3.0.0(react@18.2.0)
   '@visx/xychart':
     specifier: ^3.2.1
     version: 3.2.1(@react-spring/web@9.7.3)(react-dom@18.2.0)(react@18.2.0)
@@ -918,6 +921,16 @@ packages:
       '@visx/group': 3.0.0(react@18.2.0)
       classnames: 2.3.2
       d3-shape: 1.3.7
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@visx/gradient@3.0.0(react@18.2.0):
+    resolution: {integrity: sha512-UoM9R9PIPLO/w7hCW9gFncrLdpKNqh13sLS9/0Iy6b75uP2l05FLG2HX4kXljeyOrj4/XyzRCMYm0HHk/p5iMA==}
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.2.14
       prop-types: 15.8.1
       react: 18.2.0
     dev: false
