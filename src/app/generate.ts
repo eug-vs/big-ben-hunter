@@ -50,31 +50,38 @@ export async function generateResult(clientBinaryString: string, hash: string) {
 
   // Process the result
   console.log({ result, guess });
+  const account = await prisma.playerAccount.findUniqueOrThrow({
+    where: { userId },
+    include: {
+      flipStates: {
+        orderBy: {
+          number: 'desc',
+        },
+        take: 1,
+      }
+    }
+  });
+  const flipState = account.flipStates[0];
+  console.log(flipState);
+
   if (guess === result) {
-    await prisma.playerAccount.update({
-      where: { userId },
+    await prisma.flipState.create({
       data: {
-        balance: {
-          divide: 2,
-        },
+        number: flipState.number + 1,
+        balance: Math.floor(flipState.balance /  2),
         streak: 0,
-      },
-    });
+        playerId: account.id,
+      }
+    })
   } else {
-    const { streak } = await prisma.playerAccount.findFirstOrThrow({
-      where: { userId },
-    });
-    await prisma.playerAccount.update({
-      where: { userId },
+    await prisma.flipState.create({
       data: {
-        balance: {
-          increment: streak + 1,
-        },
-        streak: {
-          increment: 1,
-        },
-      },
-    });
+        number: account.flipStates[0]?.number + 1,
+        balance: flipState.balance + flipState.streak + 1,
+        streak: flipState.streak + 1,
+        playerId: account.id,
+      }
+    })
   }
 
   return { result, binaryString };

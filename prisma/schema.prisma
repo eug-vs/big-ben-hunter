@@ -16,8 +16,20 @@ model PlayerAccount {
 
   userId  String @unique
 
+  flipStates FlipState[]
+
+  @@index([userId])
+}
+
+model FlipState {
+  id String @id @default(cuid())
+  number Int
+
   balance Int @default(0)
   streak Int @default(0)
 
-  @@index([userId])
+  playerId String
+  player PlayerAccount @relation(fields: [playerId], references: [id])
+
+  @@index([playerId])
 }

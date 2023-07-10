@@ -10,10 +10,33 @@ export const getOrCreatePlayerAccount = cache(async () => {
   try {
     return await prisma.playerAccount.findFirstOrThrow({
       where: { userId },
+      include: {
+        flipStates: {
+          orderBy: {
+            number: 'desc',
+          },
+          take: 1,
+        },
+      },
     });
   } catch (e) {
     return prisma.playerAccount.create({
-      data: { userId },
+      data: {
+        userId,
+        flipStates: {
+          create: {
+            number: 0,
+          }
+        }
+      },
+      include: {
+        flipStates: {
+          orderBy: {
+            number: 'desc',
+          },
+          take: 1,
+        },
+      },
     });
   }
 });
@@ -28,8 +51,8 @@ export default async function Header() {
           <UserButton />
         </div>
         <section>
-          <h1>Balance: {playerAccount.balance}</h1>
-          <h1>Streak: {playerAccount.streak}</h1>
+          <h1>Balance: {playerAccount.flipStates[0].balance}</h1>
+          <h1>Streak: {playerAccount.flipStates[0].streak}</h1>
         </section>
       </div>
       <div className="text-center font-bold">
