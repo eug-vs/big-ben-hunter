@@ -27,7 +27,12 @@ export default function RootLayout({
               <SignIn />
             </SignedOut>
             <SignedIn>
-              <ReactQueryProvider>{children}</ReactQueryProvider>
+              <ReactQueryProvider>
+                <audio loop autoPlay>
+                  <source src="/ost.ogg" />
+                </audio>
+                {children}
+              </ReactQueryProvider>
             </SignedIn>
           </main>
         </ClerkProvider>
