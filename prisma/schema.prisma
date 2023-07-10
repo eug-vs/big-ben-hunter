@@ -32,4 +32,5 @@ model FlipState {
   player PlayerAccount @relation(fields: [playerId], references: [id])
 
   @@index([playerId])
+  @@unique([playerId, number])
 }
