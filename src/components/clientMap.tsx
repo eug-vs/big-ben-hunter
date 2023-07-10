@@ -16,6 +16,7 @@ import {
 import { type FlipState, type PlayerAccount } from '@prisma/client';
 import { GradientPurpleOrange } from '@visx/gradient';
 import _ from 'lodash';
+import { useMemo } from 'react';
 
 interface Props {
   data: (PlayerAccount & {
@@ -23,6 +24,7 @@ interface Props {
     flipStates: Pick<FlipState, 'balance' | 'number' | 'streak'>[];
   })[];
   height?: number;
+  showUsernameAnnotation?: boolean;
 }
 
 function buildBestPath(maxBalance: number) {
@@ -40,12 +42,33 @@ function buildBestPath(maxBalance: number) {
   return data;
 }
 
-export default function Map({ data, height = 700 }: Props) {
-  const bestPath = buildBestPath(
-    _.maxBy(
-      data.flatMap((v) => v.flipStates),
-      'balance'
-    )?.balance || 0
+export default function ClientMap({
+  data,
+  height = 700,
+  showUsernameAnnotation = true,
+}: Props) {
+  const bestPath = useMemo(
+    () =>
+      buildBestPath(
+        _.maxBy(
+          data.flatMap((v) => v.flipStates),
+          'balance'
+        )?.balance || 0
+      ),
+    [data]
+  );
+
+  const theme = useMemo(
+    () =>
+      buildChartTheme({
+        backgroundColor: '#f09ae9',
+        colors: _.shuffle(defaultColors),
+        gridColor: '#336d88',
+        gridColorDark: '#1d1b38',
+        svgLabelBig: { fill: '#1d1b38' },
+        tickLength: 8,
+      }),
+    []
   );
 
   return (
@@ -53,14 +76,7 @@ export default function Map({ data, height = 700 }: Props) {
       height={height}
       xScale={{ type: 'linear' }}
       yScale={{ type: 'linear' }}
-      theme={buildChartTheme({
-        backgroundColor: '#f09ae9',
-        colors: _.shuffle(defaultColors),
-        gridColor: '#336d88',
-        gridColorDark: '#1d1b38',
-        svgLabelBig: { fill: '#1d1b38' },
-        tickLength: 8,
-      })}
+      theme={theme}
     >
       <AnimatedGrid />
       <AnimatedAxis orientation="bottom" label="Balance" />
@@ -97,7 +113,9 @@ export default function Map({ data, height = 700 }: Props) {
           dataKey={`Path: ${account.id}`}
           datum={_.maxBy(account.flipStates, 'number') || account.flipStates[0]}
         >
-          <AnnotationLabel title={account.username} />
+          {showUsernameAnnotation && (
+            <AnnotationLabel title={account.username} />
+          )}
           <AnnotationCircleSubject />
         </Annotation>
       ))}

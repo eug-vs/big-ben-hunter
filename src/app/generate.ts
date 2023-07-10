@@ -58,8 +58,8 @@ export async function generateResult(clientBinaryString: string, hash: string) {
           number: 'desc',
         },
         take: 1,
-      }
-    }
+      },
+    },
   });
   const flipState = account.flipStates[0];
   console.log(flipState);
@@ -68,11 +68,11 @@ export async function generateResult(clientBinaryString: string, hash: string) {
     await prisma.flipState.create({
       data: {
         number: flipState.number + 1,
-        balance: Math.floor(flipState.balance /  2),
+        balance: Math.floor(flipState.balance / 2),
         streak: 0,
         playerId: account.id,
-      }
-    })
+      },
+    });
   } else {
     await prisma.flipState.create({
       data: {
@@ -80,8 +80,8 @@ export async function generateResult(clientBinaryString: string, hash: string) {
         balance: flipState.balance + flipState.streak + 1,
         streak: flipState.streak + 1,
         playerId: account.id,
-      }
-    })
+      },
+    });
   }
 
   return { result, binaryString };

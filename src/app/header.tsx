@@ -26,8 +26,8 @@ export const getOrCreatePlayerAccount = cache(async () => {
         flipStates: {
           create: {
             number: 0,
-          }
-        }
+          },
+        },
       },
       include: {
         flipStates: {
