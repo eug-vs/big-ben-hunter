@@ -1,18 +1,26 @@
 'use client';
 import {
-  AnimatedAxis, // any of these can be non-animated equivalents
+  AnimatedAxis,
   AnimatedGrid,
-  AnimatedLineSeries,
   XYChart,
   GlyphSeries,
-  AnimatedAreaSeries,
+  LineSeries,
+  AreaSeries,
+  Annotation,
+  AnnotationLabel,
+  AnnotationCircleSubject,
+  AnnotationConnector,
 } from '@visx/xychart';
 
-import { type FlipState } from '@prisma/client';
+import { type PlayerAccount, type FlipState } from '@prisma/client';
 import _ from 'lodash';
 
 interface Props {
-  data: Pick<FlipState, 'balance' | 'number' | 'streak'>[];
+  data: (PlayerAccount & {
+    username: string;
+    flipStates: Pick<FlipState, 'balance' | 'number' | 'streak'>[];
+  })[];
+  height?: number;
 }
 
 function buildBestPath(maxBalance: number) {
@@ -30,39 +38,61 @@ function buildBestPath(maxBalance: number) {
   return data;
 }
 
-export default function Map({ data }: Props) {
-  const bestPath = buildBestPath(_.maxBy(data, 'balance')?.balance || 0);
+export default function Map({ data, height = 700 }: Props) {
+  const bestPath = buildBestPath(
+    _.maxBy(
+      data.flatMap((v) => v.flipStates),
+      'balance'
+    )?.balance || 0
+  );
 
   return (
     <section className="bg-white">
-      <h1 className="text-xl font-bold p-4">Map 8====D</h1>
+      <h1 className="p-4 text-xl font-bold">Map 8====D</h1>
       <XYChart
-        height={700}
+        height={height}
         xScale={{ type: 'linear' }}
         yScale={{ type: 'linear' }}
       >
         <AnimatedGrid />
         <AnimatedAxis orientation="bottom" />
         <AnimatedAxis orientation="left" />
-        <AnimatedAreaSeries
+        <AreaSeries
           dataKey="Best path"
           fillOpacity={0.07}
           data={bestPath}
           xAccessor={(state) => state.balance}
           yAccessor={(state) => state.streak}
         />
-        <AnimatedLineSeries
-          dataKey="Path"
-          data={data}
-          xAccessor={(state) => state.balance}
-          yAccessor={(state) => state.streak}
-        />
-        <GlyphSeries
-          dataKey="Glyphs"
-          data={data}
-          xAccessor={(state) => state.balance}
-          yAccessor={(state) => state.streak}
-        />
+        {data.map((account) => (
+          <>
+            <LineSeries
+              dataKey={`Path: ${account.id}`}
+              data={account.flipStates}
+              xAccessor={(state) => state.balance}
+              yAccessor={(state) => state.streak}
+            />
+            <GlyphSeries
+              dataKey={`Glyphs: ${account.id} `}
+              data={account.flipStates}
+              xAccessor={(state) => state.balance}
+              yAccessor={(state) => state.streak}
+            />
+          </>
+        ))}
+        {data.map((account) => (
+          <Annotation
+            key={account.id}
+            dataKey={`Path: ${account.id}`}
+            datum={
+              _.maxBy(account.flipStates, 'number') || account.flipStates[0]
+            }
+          >
+            <AnnotationLabel title={account.username} />
+            <AnnotationCircleSubject />
+            <AnnotationConnector />
+          </Annotation>
+        ))}
       </XYChart>
     </section>
   );

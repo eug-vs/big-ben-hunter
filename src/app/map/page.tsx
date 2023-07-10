@@ -1,15 +1,15 @@
-import { auth } from "@clerk/nextjs";
 import Map from "./map";
 import { prisma } from '@/server/db';
+import { clerkClient } from "@clerk/nextjs";
+import _ from "lodash";
 
 export default async function MapPage() {
-  const { userId } = auth();
-  if (!userId) throw new Error('Unauthorized');
-
-  const { flipStates } = await prisma.playerAccount.findUniqueOrThrow({
-    where: { userId },
+  const data = await prisma.playerAccount.findMany({
     include: {
       flipStates: {
+        orderBy: {
+          number: 'desc',
+        },
         select: {
           number: true,
           balance: true,
@@ -18,8 +18,16 @@ export default async function MapPage() {
       },
     }
   });
+  const users = await clerkClient.users.getUserList({
+    userId: data.map(acc => acc.userId),
+  });
+
+  const dataWithNames = _.map(data, (account, index) => ({
+    ...account,
+    username: users[index].username || `${users[index].firstName || ''} ${users[index].lastName || ''}`
+  }))
 
   return (
-    <Map data={flipStates} />
+    <Map data={dataWithNames} />
   )
 }
