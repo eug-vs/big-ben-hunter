@@ -39,7 +39,7 @@ export async function generateResult(clientBinaryString: string, hash: string) {
   const { binaryString, clientHash, guess } = storeItem;
 
   // Remove storeItem after it's no longer needed
-  store[hash] = undefined;
+  delete store[hash];
 
   // Verify that client hash matches his number
   const expectedClientHash = ShaTS.sha256(clientBinaryString);
