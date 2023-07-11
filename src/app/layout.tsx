@@ -22,7 +22,7 @@ export default function RootLayout({
       >
         <ClerkProvider>
           <Header />
-          <main className="flex flex-1 flex-col p-4">
+          <main className="flex flex-1 flex-col p-6">
             <SignedOut>
               <SignIn />
             </SignedOut>

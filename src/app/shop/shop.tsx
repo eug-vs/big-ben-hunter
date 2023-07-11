@@ -44,7 +44,7 @@ export default function Shop({ playerId, balance }: Props) {
 
   return (
     <section className="grid grid-cols-3 gap-10">
-      <div className="flex justify-between rounded-md border-2 border-black bg-amber-50 p-4 shadow-lg">
+      <div className="paper flex justify-between">
         Donate :DDDDDDDD (10 BTC)
         <button
           className="text-lg font-bold disabled:text-gray-400"
@@ -54,7 +54,7 @@ export default function Shop({ playerId, balance }: Props) {
           BUY
         </button>
       </div>
-      <div className="flex justify-between rounded-md border-2 border-black bg-amber-50 p-4 shadow-lg">
+      <div className="paper flex justify-between">
         Buy some exp +{shopConfig.exp.amount} ({shopConfig.exp.price} BTC)
         <button
           className="text-lg font-bold disabled:text-gray-400"
@@ -64,7 +64,7 @@ export default function Shop({ playerId, balance }: Props) {
           BUY
         </button>
       </div>
-      <div className="flex justify-between rounded-md border-2 border-black bg-amber-50 p-4 shadow-lg">
+      <div className="paper flex justify-between">
         Minimap :DDD ({shopConfig.minimap.price} BTC)
         <button
           className="text-lg font-bold disabled:text-gray-400"

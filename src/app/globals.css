@@ -16,4 +16,8 @@
   .animation-delay-750 {
     animation-delay: 750ms;
   }
+
+  .paper {
+    @apply rounded-lg border-2 border-black bg-amber-50 p-4 shadow-lg;
+  }
 }

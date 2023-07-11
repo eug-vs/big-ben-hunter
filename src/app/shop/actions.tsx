@@ -57,7 +57,8 @@ export async function buyExp({ playerId }: { playerId: string }) {
       number: 'desc',
     },
   });
-  if (lastState.balance < shopConfig.exp.price) throw new Error('Not enough BTC');
+  if (lastState.balance < shopConfig.exp.price)
+    throw new Error('Not enough BTC');
   await prisma.flipState.create({
     data: {
       balance: lastState.balance - shopConfig.exp.price,
@@ -71,7 +72,7 @@ export async function buyExp({ playerId }: { playerId: string }) {
     data: {
       exp: {
         increment: shopConfig.exp.amount,
-      }
-    }
-  })
+      },
+    },
+  });
 }

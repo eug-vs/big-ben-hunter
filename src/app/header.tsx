@@ -58,12 +58,12 @@ export default async function Header() {
           <h1>Exp: {playerAccount.exp}</h1>
         </section>
       </div>
-      <div className="text-center font-bold">
+      <Link href="/" className="text-center font-bold">
         <h1 className="text-3xl">Big Ben Hunter</h1>
         <h2 className="text-md">Feel Benis in Yo Jopa</h2>
-      </div>
+      </Link>
       <nav className="flex gap-4 text-lg">
-        <Link href="/">Play</Link>
+        <Link href="/play">Play</Link>
         <Link href="/shop">Shop :DDD</Link>
         <Link href="/map">Map :D</Link>
       </nav>
