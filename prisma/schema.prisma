@@ -19,6 +19,7 @@ model PlayerAccount {
   exp Int @default(0)
 
   flipStates FlipState[]
+  features PlayerFeature[]
 
   @@index([userId])
 }
@@ -35,4 +36,19 @@ model FlipState {
 
   @@index([playerId])
   @@unique([playerId, number])
+}
+
+enum Feature {
+  minimap
+}
+
+model PlayerFeature {
+  id String @id @default(cuid())
+
+  playerId String
+  player PlayerAccount @relation(fields: [playerId], references: [id])
+
+  feature Feature
+  @@index([playerId])
+  @@unique([playerId, feature])
 }

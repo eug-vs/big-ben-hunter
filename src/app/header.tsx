@@ -17,6 +17,7 @@ export const getOrCreatePlayerAccount = cache(async () => {
           },
           take: 1,
         },
+        features: true,
       },
     });
   } catch (e) {
@@ -36,6 +37,7 @@ export const getOrCreatePlayerAccount = cache(async () => {
           },
           take: 1,
         },
+        features: true,
       },
     });
   }
