@@ -1,3 +1,4 @@
+import Button from '@/components/button';
 import { prisma } from '@/server/db';
 import { UserButton, auth } from '@clerk/nextjs';
 import Link from 'next/link';
@@ -63,9 +64,15 @@ export default async function Header() {
         <h2 className="text-md">Feel Benis in Yo Jopa</h2>
       </Link>
       <nav className="flex gap-4 text-lg">
-        <Link href="/play">Play</Link>
-        <Link href="/shop">Shop :DDD</Link>
-        <Link href="/map">Map :D</Link>
+        <Link href="/play">
+          <Button>Play</Button>
+        </Link>
+        <Link href="/shop">
+          <Button>Shop :DDD</Button>
+        </Link>
+        <Link href="/map">
+          <Button>Map :D</Button>
+        </Link>
       </nav>
     </header>
   );
