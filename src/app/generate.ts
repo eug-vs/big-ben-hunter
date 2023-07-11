@@ -50,8 +50,13 @@ export async function generateResult(clientBinaryString: string, hash: string) {
 
   // Process the result
   console.log({ result, guess });
-  const account = await prisma.playerAccount.findUniqueOrThrow({
+  const account = await prisma.playerAccount.update({
     where: { userId },
+    data: {
+      exp: {
+        increment: 1,
+      }
+    },
     include: {
       flipStates: {
         orderBy: {
@@ -61,8 +66,9 @@ export async function generateResult(clientBinaryString: string, hash: string) {
       },
     },
   });
+  if (!account) throw new Error('No account');
+
   const flipState = account.flipStates[0];
-  console.log(flipState);
 
   if (guess === result) {
     await prisma.flipState.create({

@@ -53,6 +53,7 @@ export default async function Header() {
         <section>
           <h1>Balance: {playerAccount.flipStates[0].balance}</h1>
           <h1>Streak: {playerAccount.flipStates[0].streak}</h1>
+          <h1>Exp: {playerAccount.exp}</h1>
         </section>
       </div>
       <div className="text-center font-bold">
