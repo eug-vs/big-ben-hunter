@@ -48,3 +48,30 @@ export async function donate({
     },
   });
 }
+
+export async function buyExp({ playerId }: { playerId: string }) {
+  'use server';
+  const lastState = await prisma.flipState.findFirstOrThrow({
+    where: { playerId: playerId },
+    orderBy: {
+      number: 'desc',
+    },
+  });
+  if (lastState.balance < shopConfig.exp.price) throw new Error('Not enough BTC');
+  await prisma.flipState.create({
+    data: {
+      balance: lastState.balance - shopConfig.exp.price,
+      streak: lastState.streak,
+      number: lastState.number + 1,
+      playerId: lastState.playerId,
+    },
+  });
+  await prisma.playerAccount.update({
+    where: { id: playerId },
+    data: {
+      exp: {
+        increment: shopConfig.exp.amount,
+      }
+    }
+  })
+}
