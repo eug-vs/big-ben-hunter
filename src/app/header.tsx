@@ -45,19 +45,27 @@ export const getOrCreatePlayerAccount = cache(async () => {
 });
 
 export default async function Header() {
-  const playerAccount = await getOrCreatePlayerAccount();
+  const playerAccount = await getOrCreatePlayerAccount().catch(() => null);
 
   return (
     <header className="flex w-full items-center justify-between border-b-2 border-black bg-primary p-4 font-semibold uppercase shadow-xl">
       <div className="flex items-center gap-4">
-        <div className="h-8 w-8">
-          <UserButton />
-        </div>
-        <section>
-          <h1>Balance: {playerAccount.flipStates[0].balance}</h1>
-          <h1>Streak: {playerAccount.flipStates[0].streak}</h1>
-          <h1>Exp: {playerAccount.exp}</h1>
-        </section>
+        {playerAccount ? (
+          <>
+            <div className="h-8 w-8">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+            <section>
+              <h1>Balance: {playerAccount.flipStates[0].balance}</h1>
+              <h1>Streak: {playerAccount.flipStates[0].streak}</h1>
+              <h1>Exp: {playerAccount.exp}</h1>
+            </section>
+          </>
+        ) : (
+          <Link href="/play">
+            <Button>Sign in</Button>
+          </Link>
+        )}
       </div>
       <Link href="/" className="text-center font-bold">
         <h1 className="text-3xl">Big Ben Hunter</h1>
