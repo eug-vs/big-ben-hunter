@@ -13,7 +13,7 @@ export default async function Home() {
     <>
       <Game streak={playerAccount.flipStates[0].streak} />
       {_.find(playerAccount.features, { feature: 'minimap' }) && (
-        <div className="absolute bottom-12 left-12 w-96 bg-amber-50 rounded-lg shadow-lg border-2 border-black">
+        <div className="absolute bottom-12 left-12 w-96 rounded-lg border-2 border-black bg-amber-50 shadow-lg">
           <Map
             height={250}
             accountFilter={{ userId }}

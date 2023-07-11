@@ -55,7 +55,7 @@ export async function generateResult(clientBinaryString: string, hash: string) {
     data: {
       exp: {
         increment: 1,
-      }
+      },
     },
     include: {
       flipStates: {
