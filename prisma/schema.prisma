@@ -35,7 +35,7 @@ model FlipState {
   player PlayerAccount @relation(fields: [playerId], references: [id])
 
   @@index([playerId])
-  @@unique([playerId, number])
+  @@unique([playerId, number(sort: Desc)])
 }
 
 enum Feature {
