@@ -16,7 +16,7 @@ model PlayerAccount {
 
   userId  String @unique
 
-  exp Int @default(0)
+  ht Int @default(0)
 
   flipStates FlipState[]
   features PlayerFeature[]

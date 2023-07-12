@@ -49,19 +49,23 @@ export async function donate({
   });
 }
 
-export async function buyExp({ playerId }: { playerId: string }) {
+export async function buyHt({ playerId, amount }: { playerId: string, amount: number }) {
   'use server';
+  const exchangeRate = shopConfig.ht.find(r => r.amount === amount);
+  if (!exchangeRate) throw new Error('No such price in shop');
+  const { price } = exchangeRate;
+
   const lastState = await prisma.flipState.findFirstOrThrow({
     where: { playerId: playerId },
     orderBy: {
       number: 'desc',
     },
   });
-  if (lastState.balance < shopConfig.exp.price)
+  if (lastState.balance < price)
     throw new Error('Not enough BTC');
   await prisma.flipState.create({
     data: {
-      balance: lastState.balance - shopConfig.exp.price,
+      balance: lastState.balance - price,
       streak: lastState.streak,
       number: lastState.number + 1,
       playerId: lastState.playerId,
@@ -70,8 +74,8 @@ export async function buyExp({ playerId }: { playerId: string }) {
   await prisma.playerAccount.update({
     where: { id: playerId },
     data: {
-      exp: {
-        increment: shopConfig.exp.amount,
+      ht: {
+        increment: amount,
       },
     },
   });

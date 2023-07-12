@@ -1,6 +1,6 @@
 'use client';
 import { useMutation } from '@tanstack/react-query';
-import { buyExp, buyFeature, donate } from './actions';
+import { buyHt, buyFeature, donate } from './actions';
 import shopConfig from './shopConfig';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -32,8 +32,8 @@ export default function Shop({ playerId, balance }: Props) {
     },
   });
 
-  const { mutateAsync: handleBuyExp, isLoading: isBuyingExp } = useMutation({
-    mutationFn: buyExp,
+  const { mutateAsync: handleBuyHt, isLoading: isBuyingExp } = useMutation({
+    mutationFn: buyHt,
     onSuccess() {
       startTransition(() => {
         router.refresh();
@@ -55,15 +55,6 @@ export default function Shop({ playerId, balance }: Props) {
         </Button>
       </div>
       <div className="paper flex justify-between">
-        Buy some exp +{shopConfig.exp.amount} ({shopConfig.exp.price} BTC)
-        <Button
-          disabled={balance < shopConfig.exp.price || isLoading}
-          onClick={() => handleBuyExp({ playerId })}
-        >
-          BUY
-        </Button>
-      </div>
-      <div className="paper flex justify-between">
         Minimap :DDD ({shopConfig.minimap.price} BTC)
         <Button
           disabled={balance < shopConfig.minimap.price || isLoading}
@@ -72,6 +63,17 @@ export default function Shop({ playerId, balance }: Props) {
           BUY
         </Button>
       </div>
+      {shopConfig.ht.map(({ amount, price }) => (
+        <div key={amount} className="paper flex justify-between">
+          Exchange {price} BTC {'<->'} {amount} HT
+          <Button
+            disabled={balance < price || isLoading}
+            onClick={() => handleBuyHt({ playerId, amount })}
+          >
+            BUY
+          </Button>
+        </div>
+      ))}
     </section>
   );
 }
