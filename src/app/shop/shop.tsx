@@ -44,7 +44,7 @@ export default function Shop({ playerId, balance }: Props) {
   const isLoading = isDonating || isBuying || isBuyingExp || isPending;
 
   return (
-    <section className="grid grid-cols-3 gap-10">
+    <section className="grid grid-cols-3 gap-10 container mx-auto">
       <div className="paper flex justify-between">
         Donate :DDDDDDDD (10 BTC)
         <Button
